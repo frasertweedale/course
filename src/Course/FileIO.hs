@@ -63,7 +63,7 @@ the contents of c
 main ::
   IO ()
 main =
-  error "todo"
+  getArgs >>= \(x :. _) -> run x
 
 type FilePath =
   Chars
@@ -72,31 +72,27 @@ type FilePath =
 run ::
   Chars
   -> IO ()
-run =
-  error "todo"
+run index = getFile index >>= getFiles . lines . snd >>= printFiles
 
 getFiles ::
   List FilePath
   -> IO (List (FilePath, Chars))
-getFiles =
-  error "todo"
+getFiles = sequence . (getFile <$>)
 
 getFile ::
   FilePath
   -> IO (FilePath, Chars)
-getFile =
-  error "todo"
+getFile path = (,) path <$> readFile path
 
 printFiles ::
   List (FilePath, Chars)
   -> IO ()
-printFiles =
-  error "todo"
+printFiles xs = sequence (uncurry printFile <$> xs) *> pure ()
 
 printFile ::
   FilePath
   -> Chars
   -> IO ()
-printFile =
-  error "todo"
-
+printFile path contents = do
+  putStrLn $ "============ " ++ path
+  putStrLn contents
